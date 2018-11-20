@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>文字数カウンター　| Word Counter</title>
+<meta name="description" content="文字数をカウントします。改行やスペースの有効・無効の設定も可能。">
+<meta name="keywords" content="文字数カウンター,文字数,WordCount,Caracter Count,カウンター">
+
+<link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
+
+<!-- UIkit CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.23/css/uikit.min.css" />
+
+<!-- UIkit JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.23/js/uikit.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.23/js/uikit-icons.min.js"></script>
+
+<link href="./css/styles.css" rel="stylesheet" type="text/css" media="all">
+<link rel="shortcut icon" href="./images/favicon.ico"> 
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+
+	
+</head>
+<body>
+<div class="wrapper">
+	<div class="text_area" id="app">
+		<p class="count">{{ text_length }}</p>
+		<div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+            <label><input class="uk-checkbox" type="checkbox" v-model="reject_newline" @change="CountText"> 改行は含まない</label>
+            <label><input class="uk-checkbox" type="checkbox" v-model="reject_space" @change="CountText"> スペースは含まない</label>
+        </div>
+		<textarea id="text_box" v-model="text" @input="CountText" class="uk-textarea" placeholder="ここにカウントしたい文字をペーストしてください"></textarea>
+		<h1>文字数カウンター</h1>
+	</div>
+
+</div>
+
+<script>
+new Vue({
+	el: '#app',
+	data: {
+		text: null,
+		text_length: 0,
+		reject_newline: false,
+		reject_space: false
+	},
+	methods: {
+		CountText: function() {
+			this.text_length = this.text.length
+			console.log(this.text.split("\n").length);
+
+			//　改行は含まない場合
+			if (this.reject_newline && this.text_length > 0) {
+				this.text_length = this.text_length - ( this.text.split("\n").length - 1 )
+			}
+			
+			// スペースは含まない場合
+			if (this.reject_space && this.text_length > 0) {
+				this.text_length = this.text_length - ( this.text.split(" ").length - 1)
+				this.text_length = this.text_length - ( this.text.split("　").length - 1)
+			}
+		}
+	}
+});
+</script>
+
+</body>
+</html>
